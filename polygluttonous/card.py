@@ -3,7 +3,7 @@ import time
 
 class Card:
 	
-	def __init__(frontside, backside, time_added):
+	def __init__(self, frontside, backside, time_added):
 		'''
 		Cards are the fundamental building block of all spaced repitition software. You show the user the frontside, they guess the backside 
 		then if they got it right, increase stack, otherwise, set stack back to zero.
@@ -51,7 +51,7 @@ class Card:
 		'''
 		this tells if a card is due to be reviewed, technecally superfluous, but keeps me from constantly rechecking time
 		'''
-		self.due = false
+		self.due = False
 	
 		'''
 		
