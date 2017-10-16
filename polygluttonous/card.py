@@ -55,6 +55,7 @@ class Card:
 		'''
 		self.due = False
 
+	#procedure if the card was answered correctly
 	def correct(self):
 		if self.stack != 10:
 			self.stack += 1
@@ -62,10 +63,20 @@ class Card:
 		self.time_next = self.time_last_used + Card.STACK_TIME[self.stack]
 		self.due = False
 
+	#procedure if the card was answered incorrectly
 	def incorrect(self):
 		self.stack = 0
 		self.time_last_used = time.time()
 		self.time_next = self.time_last_used + 5
 		self.due = False
 
+	
+	def check_card_ready(self):
+		if time.time() > self.time_next:
+			return True
+		return False
+
+	def return_time_before_ready(self):
+		time_diff = self.time_next - time.time()
+		return time_diff	
 	
