@@ -1,8 +1,10 @@
 import sys
 import time
 
+
+
 class Card:
-	
+	STACK_TIME = [5, 25, 120, 600, 3600, 3600*5, 3600*24, 3600*24*5, 3600*24*25, 3600*24*30*4, 3600*24*365*2] #returns value in seconds
 	def __init__(self, frontside, backside, time_added):
 		'''
 		Cards are the fundamental building block of all spaced repitition software. You show the user the frontside, they guess the backside 
@@ -46,15 +48,24 @@ class Card:
 		'''
 		this is the calculated time for the future
 		''' 
-		self.time_next = time.time() + 5.0
+		self.time_next = self.time_added + 5.0
 
 		'''
 		this tells if a card is due to be reviewed, technecally superfluous, but keeps me from constantly rechecking time
 		'''
 		self.due = False
+
+	def correct(self):
+		if self.stack != 10:
+			self.stack += 1
+		self.time_last_used = time.time()
+		self.time_next = self.time_last_used + Card.STACK_TIME[self.stack]
+		self.due = False
+
+	def incorrect(self):
+		self.stack = 0
+		self.time_last_used = time.time()
+		self.time_next = self.time_last_used + 5
+		self.due = False
+
 	
-		'''
-		
-		'''
-
-
