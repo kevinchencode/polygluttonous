@@ -1,7 +1,7 @@
 import sys
 import time
 
-
+#TODO: write code that exports activity logs
 
 class Card:
 	STACK_TIME = [5, 25, 120, 600, 3600, 3600*5, 3600*24, 3600*24*5, 3600*24*25, 3600*24*30*4, 3600*24*365*2] #returns value in seconds
@@ -55,6 +55,8 @@ class Card:
 		'''
 		self.due = False
 
+		self.ID = 0 #generate_ID() as soon as I figure out how this is going to work
+
 	#procedure if the card was answered correctly
 	def correct(self):
 		if self.stack != 10:
@@ -70,13 +72,17 @@ class Card:
 		self.time_next = self.time_last_used + 5
 		self.due = False
 
-	
+	#procedure to return whether or not a card is ready to be shown
 	def check_card_ready(self):
 		if time.time() > self.time_next:
 			return True
 		return False
 
+	#procedure to tell how much time if left before 
 	def return_time_before_ready(self):
 		time_diff = self.time_next - time.time()
-		return time_diff	
+		return time_diff
+
+	def __str__(self):
+		return ', '.join("{%s: %s}" % item for item in at.items())
 	
