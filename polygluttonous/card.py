@@ -1,8 +1,8 @@
 import sys
 import time
+from fuzzywuzzy import fuzz
 
 #TODO: write code that exports activity logs
-
 class Card:
 	STACK_TIME = [5, 25, 120, 600, 3600, 3600*5, 3600*24, 3600*24*5, 3600*24*25, 3600*24*30*4, 3600*24*365*2] #returns value in seconds
 	def __init__(self, frontside, backside, time_added):
@@ -83,6 +83,20 @@ class Card:
 		time_diff = self.time_next - time.time()
 		return time_diff
 
+	#basic printing ability for object
 	def __str__(self):
+		at = vars(self)
 		return ', '.join("{%s: %s}" % item for item in at.items())
-	
+
+	#gives the front of the card, makes you guess the backside
+	def guess(self):
+		print self.frontside
+		inp = raw_input()
+		match = fuzz.ratio(inp, self.backside)
+		print match
+		if match > 70:
+			self.correct()
+			return True
+		else:
+			self.incorrect()
+			return False
