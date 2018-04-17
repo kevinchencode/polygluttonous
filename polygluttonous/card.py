@@ -1,11 +1,15 @@
 import sys
 import time
+import random
 from fuzzywuzzy import fuzz
 
 #TODO: write code that exports activity logs
 class Card:
 	STACK_TIME = [5, 25, 120, 600, 3600, 3600*5, 3600*24, 3600*24*5, 3600*24*25, 3600*24*30*4, 3600*24*365*2] #returns value in seconds
-	def __init__(self, frontside, backside, time_added):
+	def __init__(self, ID, frontside, backside, time_added):
+		
+		#in this order: frontside, backside, 
+		
 		'''
 		Cards are the fundamental building block of all spaced repitition software. You show the user the frontside, they guess the backside 
 		then if they got it right, increase stack, otherwise, set stack back to zero.
@@ -55,15 +59,19 @@ class Card:
 		'''
 		self.due = False
 
-		self.ID = 0 #generate_ID() as soon as I figure out how this is going to work
+		self.ID = ID #generate_ID() as soon as I figure out how this is going to work
 
 	#procedure if the card was answered correctly
 	def correct(self):
 		if self.stack != 10:
 			self.stack += 1
 		self.time_last_used = time.time()
-		self.time_next = self.time_last_used + Card.STACK_TIME[self.stack]
+		#next time adds a random number to randomize card order if cards are in same stack and accessed in same session
+		self.time_next = self.time_last_used + Card.STACK_TIME[self.stack] \
+		+ max(random.randint(0, 30), random.randint(0, Card.STACK_TIME[self.stack]))
+	
 		self.due = False
+		return
 
 	#procedure if the card was answered incorrectly
 	def incorrect(self):
@@ -71,6 +79,7 @@ class Card:
 		self.time_last_used = time.time()
 		self.time_next = self.time_last_used + 5
 		self.due = False
+		return
 
 	#procedure to return whether or not a card is ready to be shown
 	def check_card_ready(self):
@@ -100,3 +109,9 @@ class Card:
 		else:
 			self.incorrect()
 			return False
+	#given a tuple, create the card for it
+	def import_row(self, row):
+		self.frontside,	self.backside,	self.stack,	self.time_added,	self.time_last_used, \
+		self.time_next,	self.due,	self.ID 	= row
+		return	
+	
