@@ -5,8 +5,10 @@ from fuzzywuzzy import fuzz
 
 #TODO: write code that exports activity logs
 class Card:
+
+	back_synonyms = []
 	STACK_TIME = [5, 25, 120, 600, 3600, 3600*5, 3600*24, 3600*24*5, 3600*24*25, 3600*24*30*4, 3600*24*365*2] #returns value in seconds
-	def __init__(self, ID, frontside, backside, time_added):
+	def __init__(self, ID, frontside, backside):
 		
 		#in this order: frontside, backside, 
 		
@@ -96,6 +98,9 @@ class Card:
 	def __str__(self):
 		at = vars(self)
 		return ', '.join("{%s: %s}" % item for item in at.items())
+	#saving items as a csv file
+	def csv(self):
+		return ', '.join("%s" % value for item, value in vars(self).items())
 
 	#gives the front of the card, makes you guess the backside
 	def guess(self):
@@ -107,9 +112,19 @@ class Card:
 			self.correct()
 			return True
 		else:
+			for syn in self.back_synonyms:
+				fuzz.ratio(inp, syn)
+				if match > 70:
+					self.correct()
+					return true
 			self.incorrect()
 			return False
 	#given a tuple, create the card for it
+	
+	def add_back_synonym(synonym):
+		self.back_synonyms = self.back_synonyms + synonym
+		return
+
 	def import_row(self, row):
 		self.frontside,	self.backside,	self.stack,	self.time_added,	self.time_last_used, \
 		self.time_next,	self.due,	self.ID 	= row
