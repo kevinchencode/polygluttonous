@@ -98,9 +98,10 @@ class Card:
 	def __str__(self):
 		at = vars(self)
 		return ', '.join("{%s: %s}" % item for item in at.items())
-	#saving items as a csv file
+	#saving list of items to put into a csv file
 	def csv(self):
-		return ', '.join("%s" % value for item, value in vars(self).items())
+		arr =  [value for item, value in vars(self).items()]
+		return arr
 
 	#gives the front of the card, makes you guess the backside
 	def guess(self):
